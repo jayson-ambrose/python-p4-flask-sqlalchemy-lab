@@ -9,15 +9,33 @@ db = SQLAlchemy(metadata=metadata)
 
 class Zookeeper(db.Model):
     __tablename__ = 'zookeepers'
+    # has name, birthday and list of animals
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    birthday = db.Column(db.String)
+
+    animals = db.relationship('Animal', backref='zookeeper')
 
 class Enclosure(db.Model):
     __tablename__ = 'enclosures'
 
+    #has environment(grass, sand or water), open_to_visitors(boolean), animals
+
     id = db.Column(db.Integer, primary_key=True)
+    environment = db.Column(db.String)
+    open_to_visitors = db.Column(db.Boolean) 
+
+    animals = db.relationship('Animal', backref='enclosure')   
 
 class Animal(db.Model):
     __tablename__ = 'animals'
 
+    #has name, species, zookeeper and enclosure
+
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    species = db.Column(db.String)
+
+    zookeeper_id = db.Column(db.Integer, db.ForeignKey('zookeepers.id'))
+    enclosure_id = db.Column(db.Integer, db.ForeignKey('enclosures.id'))
